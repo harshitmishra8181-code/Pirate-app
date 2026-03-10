@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Pirate Fitness Quest</title>
+
+<style>
+
+body{
+font-family:Arial;
+background:linear-gradient(#0B2545,#1E90FF);
+color:white;
+text-align:center;
+padding:20px;
+}
+
+h1{
+color:#FFD700;
+}
+
+.container{
+background:rgba(0,0,0,0.4);
+padding:20px;
+border-radius:12px;
+max-width:600px;
+margin:auto;
+}
+
+button{
+padding:10px 18px;
+margin:8px;
+border:none;
+border-radius:6px;
+background:#FFD700;
+font-weight:bold;
+cursor:pointer;
+}
+
+button:hover{
+background:#FFA500;
+}
+
+.progress{
+width:100%;
+background:#333;
+border-radius:8px;
+margin-top:10px;
+}
+
+.bar{
+height:18px;
+background:#FFD700;
+width:0%;
+border-radius:8px;
+}
+
+.card{
+margin-top:20px;
+padding:15px;
+background:rgba(255,255,255,0.08);
+border-radius:10px;
+}
+
+</style>
+</head>
+
+<body>
+
+<h1>🏴‍☠️ Pirate Fitness Quest</h1>
+
+<div class="container">
+
+<div class="card">
+<h2>💧 Water Tracker</h2>
+<p>Glasses: <span id="water">0</span> / 8</p>
+<button onclick="addWater()">Drink Water</button>
+<button onclick="resetWater()">Reset</button>
+</div>
+
+<div class="card">
+<h2>⚔ Daily Pirate Mission</h2>
+<p id="physical">Click mission button</p>
+<p id="social"></p>
+<button onclick="newMission()">New Mission</button>
+</div>
+
+<div class="card">
+<h2>💬 Pirate Motivation</h2>
+<p id="quote">Click for motivation</p>
+<button onclick="newQuote()">New Quote</button>
+</div>
+
+<div class="card">
+<h2>🏆 Pirate Rank</h2>
+<p>XP: <span id="xp">0</span></p>
+<p>Rank: <span id="rank">Rookie Pirate</span></p>
+
+<div class="progress">
+<div class="bar" id="xpBar"></div>
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+let water = localStorage.getItem("water") || 0
+let xp = localStorage.getItem("xp") || 0
+
+water=parseInt(water)
+xp=parseInt(xp)
+
+updateUI()
+
+function addWater(){
+
+water++
+
+if(water>=8){
+xp+=10
+alert("Hydration goal complete! +10 XP")
+}
+
+save()
+updateUI()
+
+}
+
+function resetWater(){
+water=0
+save()
+updateUI()
+}
+
+function save(){
+
+localStorage.setItem("water",water)
+localStorage.setItem("xp",xp)
+
+}
+
+const physicalChallenges=[
+"20 Pushups",
+"30 Squats",
+"1km Run",
+"2 Minute Plank",
+"15 Burpees",
+"10 Minute Stretch",
+"25 Jumping Jacks"
+]
+
+const socialChallenges=[
+"Compliment someone",
+"Call a friend",
+"Help someone today",
+"Talk to a new person",
+"Say thank you",
+"Do a kind act"
+]
+
+function newMission(){
+
+let p=Math.floor(Math.random()*physicalChallenges.length)
+let s=Math.floor(Math.random()*socialChallenges.length)
+
+document.getElementById("physical").innerText=physicalChallenges[p]
+document.getElementById("social").innerText=socialChallenges[s]
+
+xp+=20
+
+save()
+updateUI()
+
+}
+
+const quotes=[
+"The sea favors the brave.",
+"Small progress becomes great victories.",
+"Train like a pirate warrior.",
+"Discipline builds legends.",
+"Your journey begins today.",
+"Strength grows every day."
+]
+
+function newQuote(){
+
+let q=Math.floor(Math.random()*quotes.length)
+document.getElementById("quote").innerText=quotes[q]
+
+}
+
+function getRank(xp){
+
+if(xp<50) return "Rookie Pirate"
+if(xp<120) return "Deck Fighter"
+if(xp<250) return "Sea Warrior"
+if(xp<400) return "Grand Line Captain"
+return "Pirate King"
+
+}
+
+function updateUI(){
+
+document.getElementById("water").innerText=water
+document.getElementById("xp").innerText=xp
+
+let rank=getRank(xp)
+document.getElementById("rank").innerText=rank
+
+let percent=(xp%100)
+document.getElementById("xpBar").style.width=percent+"%"
+
+}
+
+</script>
+
+</body>
+</html>
